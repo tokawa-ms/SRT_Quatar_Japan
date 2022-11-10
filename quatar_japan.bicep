@@ -95,7 +95,7 @@ resource networkInterface1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 
 resource networkInterface2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   name: 'japaneast-nic'
-  location: location1
+  location: location2
   properties: {
     ipConfigurations: [
       {
