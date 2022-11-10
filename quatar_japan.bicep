@@ -149,7 +149,7 @@ resource quatarVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
       vmSize: 'Standard_F8s_v2'
     }
     osProfile: {
-      computerName: 'srtgatewayqatar'
+      computerName: 'srtgatewayqatar${uniqueness}'
       adminUsername: adminusername
       adminPassword: adminpassword
     }
@@ -161,7 +161,7 @@ resource quatarVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
         version: 'latest'
       }
       osDisk: {
-        name: 'osdisk'
+        name: 'qcosdisk${uniqueness}'
         caching: 'ReadWrite'
         createOption: 'FromImage'
       }
@@ -195,7 +195,7 @@ resource japaneastVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
       vmSize: 'Standard_F8s_v2'
     }
     osProfile: {
-      computerName: 'srtgatewayqatar'
+      computerName: 'srtgatewayjapan${uniqueness}'
       adminUsername: adminusername
       adminPassword: adminpassword
     }
@@ -207,7 +207,7 @@ resource japaneastVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
         version: 'latest'
       }
       osDisk: {
-        name: 'osdisk'
+        name: 'jeosdisk${uniqueness}'
         caching: 'ReadWrite'
         createOption: 'FromImage'
       }
