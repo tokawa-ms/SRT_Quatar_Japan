@@ -112,9 +112,18 @@ resource networkInterface2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 }
 
 /* diag storage*/
-resource stg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: 'diagstorage${uniqueness}'
+resource qatarstg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+  name: 'qatardiagstorage${uniqueness}'
   location: location1
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'Storage'
+}
+
+resource japaneaststg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+  name: 'japaneastdiagstorage${uniqueness}'
+  location: location2
   sku: {
     name: 'Standard_LRS'
   }
@@ -167,7 +176,7 @@ resource quatarVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: true
-        storageUri: stg.properties.primaryEndpoints.blob
+        storageUri: qatarstg.properties.primaryEndpoints.blob
       }
     }
   }
@@ -213,7 +222,7 @@ resource japaneastVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     diagnosticsProfile: {
       bootDiagnostics: {
         enabled: true
-        storageUri: stg.properties.primaryEndpoints.blob
+        storageUri: japaneaststg.properties.primaryEndpoints.blob
       }
     }
   }
