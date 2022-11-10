@@ -99,11 +99,11 @@ resource networkInterface2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   properties: {
     ipConfigurations: [
       {
-        name: 'qatar-ip'
+        name: 'japaneast-ip'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
-            id: resourceId('Microsoft.Network/virtualNetworks/subnets',virtualNetwork1.name,'Subnet-1')
+            id: resourceId('Microsoft.Network/virtualNetworks/subnets',virtualNetwork2.name,'Subnet-1')
           }
         }
       }

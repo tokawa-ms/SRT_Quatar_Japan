@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "16805922584984024433"
+      "templateHash": "2073420847471078201"
     }
   },
   "parameters": {
@@ -136,18 +136,18 @@
       "properties": {
         "ipConfigurations": [
           {
-            "name": "qatar-ip",
+            "name": "japaneast-ip",
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('qatarcentral-vnet-{0}', variables('uniqueness')), 'Subnet-1')]"
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('japaneast-vnet-{0}', variables('uniqueness')), 'Subnet-1')]"
               }
             }
           }
         ]
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/virtualNetworks', format('qatarcentral-vnet-{0}', variables('uniqueness')))]"
+        "[resourceId('Microsoft.Network/virtualNetworks', format('japaneast-vnet-{0}', variables('uniqueness')))]"
       ]
     },
     {
