@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "389085595141256023"
+      "templateHash": "15149210507092097973"
     }
   },
   "parameters": {
@@ -185,7 +185,7 @@
           "vmSize": "Standard_F8s_v2"
         },
         "osProfile": {
-          "computerName": "srtgatewayqatar",
+          "computerName": "[format('srtgatewayqatar{0}', variables('uniqueness'))]",
           "adminUsername": "[parameters('adminusername')]",
           "adminPassword": "[parameters('adminpassword')]"
         },
@@ -197,7 +197,7 @@
             "version": "latest"
           },
           "osDisk": {
-            "name": "osdisk",
+            "name": "[format('qcosdisk{0}', variables('uniqueness'))]",
             "caching": "ReadWrite",
             "createOption": "FromImage"
           }
@@ -236,7 +236,7 @@
           "vmSize": "Standard_F8s_v2"
         },
         "osProfile": {
-          "computerName": "srtgatewayqatar",
+          "computerName": "[format('srtgatewayjapan{0}', variables('uniqueness'))]",
           "adminUsername": "[parameters('adminusername')]",
           "adminPassword": "[parameters('adminpassword')]"
         },
@@ -248,7 +248,7 @@
             "version": "latest"
           },
           "osDisk": {
-            "name": "osdisk",
+            "name": "[format('jeosdisk{0}', variables('uniqueness'))]",
             "caching": "ReadWrite",
             "createOption": "FromImage"
           }
