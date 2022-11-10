@@ -190,10 +190,22 @@ resource japaneaststg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 }
 
 /* Deploy VM*/
-param adminusername string
+param adminusername string = 'hvroot'
 
 @secure()
-param adminpassword string
+param adminkey string
+
+var linuxConfiguration = {
+  disablePasswordAuthentication: true
+  ssh: {
+    publicKeys: [
+      {
+        path: '/home/${adminusername}/.ssh/authorized_keys'
+        keyData: adminkey
+      }
+    ]
+  }
+}
 
 resource quatarVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   name: 'srt-gateway-qatar-vm-${uniqueness}'
@@ -210,7 +222,8 @@ resource quatarVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     osProfile: {
       computerName: 'srtgatewayqatar${uniqueness}'
       adminUsername: adminusername
-      adminPassword: adminpassword
+      adminPassword: adminkey
+      linuxConfiguration: linuxConfiguration
     }
     storageProfile: {
       imageReference: {
@@ -256,7 +269,8 @@ resource japaneastVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     osProfile: {
       computerName: 'srtgatewayjapan${uniqueness}'
       adminUsername: adminusername
-      adminPassword: adminpassword
+      adminPassword: adminkey
+      linuxConfiguration: linuxConfiguration
     }
     storageProfile: {
       imageReference: {
