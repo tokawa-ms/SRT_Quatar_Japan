@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "4260043983501843285"
+      "templateHash": "36369433675630315"
     }
   },
   "parameters": {
@@ -75,6 +75,36 @@
       "location": "[parameters('location2')]",
       "properties": {
         "securityRules": "[variables('sharedRules')]"
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2019-11-01",
+      "name": "[format('qcpubip-{0}', variables('uniqueness'))]",
+      "location": "[parameters('location1')]",
+      "sku": {
+        "name": "Basic"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[format('qcgw-{0}', variables('uniqueness'))]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2019-11-01",
+      "name": "[format('jepubip-{0}', variables('uniqueness'))]",
+      "location": "[parameters('location2')]",
+      "sku": {
+        "name": "Basic"
+      },
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic",
+        "dnsSettings": {
+          "domainNameLabel": "[format('jegw-{0}', variables('uniqueness'))]"
+        }
       }
     },
     {
@@ -168,6 +198,9 @@
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('qatarcentral-vnet-{0}', variables('uniqueness')), 'Subnet-1')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('qcpubip-{0}', variables('uniqueness')))]"
               }
             }
           }
@@ -178,6 +211,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', format('qcnsg-{0}', variables('uniqueness')))]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', format('qcpubip-{0}', variables('uniqueness')))]",
         "[resourceId('Microsoft.Network/virtualNetworks', format('qatarcentral-vnet-{0}', variables('uniqueness')))]"
       ]
     },
@@ -194,6 +228,9 @@
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
                 "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('japaneast-vnet-{0}', variables('uniqueness')), 'Subnet-1')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('jepubip-{0}', variables('uniqueness')))]"
               }
             }
           }
@@ -204,6 +241,7 @@
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkSecurityGroups', format('jensg-{0}', variables('uniqueness')))]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', format('jepubip-{0}', variables('uniqueness')))]",
         "[resourceId('Microsoft.Network/virtualNetworks', format('japaneast-vnet-{0}', variables('uniqueness')))]"
       ]
     },

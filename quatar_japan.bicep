@@ -19,6 +19,35 @@ resource jensg 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
   }
 }
 
+/* public ip*/
+resource qcpublicIPAddress 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'qcpubip-${uniqueness}'
+  location: location1
+  sku:{
+    name: 'Basic'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Dynamic'
+    dnsSettings: {
+      domainNameLabel: 'qcgw-${uniqueness}'
+    }
+  }
+}
+
+resource jepublicIPAddress 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
+  name: 'jepubip-${uniqueness}'
+  location: location2
+  sku:{
+    name: 'Basic'
+  }
+  properties: {
+    publicIPAllocationMethod: 'Dynamic'
+    dnsSettings: {
+      domainNameLabel: 'jegw-${uniqueness}'
+    }
+  }
+}
+
 /* Qatar Central VNET */
 param location1 string = 'qatarcentral'
 resource virtualNetwork1 'Microsoft.Network/virtualNetworks@2019-11-01' = {
@@ -105,6 +134,9 @@ resource networkInterface1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
           subnet: {
             id: resourceId('Microsoft.Network/virtualNetworks/subnets',virtualNetwork1.name,'Subnet-1')
           }
+          publicIPAddress:{
+            id: qcpublicIPAddress.id
+          }
         }
       }
     ]
@@ -125,6 +157,9 @@ resource networkInterface2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
             id: resourceId('Microsoft.Network/virtualNetworks/subnets',virtualNetwork2.name,'Subnet-1')
+          }
+          publicIPAddress:{
+            id: jepublicIPAddress.id
           }
         }
       }
