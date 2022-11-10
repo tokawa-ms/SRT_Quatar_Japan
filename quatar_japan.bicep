@@ -174,7 +174,7 @@ resource quatarVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
 }
 
 resource japaneastVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
-  name: 'srt-gateway-qatar-vm-${uniqueness}'
+  name: 'srt-gateway-japaneast-vm-${uniqueness}'
   location: location2
   plan: {
     name: 'srt-gateway-3-7-5-mi'
