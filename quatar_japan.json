@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "13089019747520573484"
+      "templateHash": "11814293915137791905"
     }
   },
   "parameters": {
@@ -153,8 +153,18 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-04-01",
-      "name": "[format('diagstorage{0}', variables('uniqueness'))]",
+      "name": "[format('qatardiagstorage{0}', variables('uniqueness'))]",
       "location": "[parameters('location1')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "Storage"
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-04-01",
+      "name": "[format('japaneastdiagstorage{0}', variables('uniqueness'))]",
+      "location": "[parameters('location2')]",
       "sku": {
         "name": "Standard_LRS"
       },
@@ -202,13 +212,13 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('diagstorage{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('qatardiagstorage{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
           }
         }
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', 'qatar-nic')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', format('diagstorage{0}', variables('uniqueness')))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', format('qatardiagstorage{0}', variables('uniqueness')))]"
       ]
     },
     {
@@ -253,13 +263,13 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('diagstorage{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('japaneastdiagstorage{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Network/networkInterfaces', 'japaneast-nic')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', format('diagstorage{0}', variables('uniqueness')))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', format('japaneastdiagstorage{0}', variables('uniqueness')))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', 'japaneast-nic')]"
       ]
     }
   ]
