@@ -3,7 +3,7 @@
       {
         "name": "Allow_HTTP_from_Any_IP",
         "properties": {
-          "description": "Allow inbound RDP from the company's IP address range.",
+          "description": "Allow inbound HTTP from ANY IP address range.",
           "protocol": "Tcp",
           "sourceAddressPrefix": "*",
           "sourcePortRange": "*",
@@ -17,7 +17,7 @@
       {
         "name": "Allow_HTTPS_from_Any_IP",
         "properties": {
-          "description": "Allow inbound RDP from the company's IP address range.",
+          "description": "Allow inbound HTTPS from ANY IP address range.",
           "protocol": "Tcp",
           "sourceAddressPrefix": "*",
           "sourcePortRange": "*",
@@ -25,6 +25,20 @@
           "destinationPortRange": "443",
           "access": "Allow",
           "priority": 101,
+          "direction": "Inbound"
+        }
+      },
+      {
+        "name": "Allow_SRT_from_Any_IP",
+        "properties": {
+          "description": "Allow inbound RDP from the company's IP address range.",
+          "protocol": "Udp",
+          "sourceAddressPrefix": "*",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "VirtualNetwork",
+          "destinationPortRange": "5555",
+          "access": "Allow",
+          "priority": 200,
           "direction": "Inbound"
         }
       }
