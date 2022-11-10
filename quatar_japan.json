@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "17373561963042486939"
+      "templateHash": "16805922584984024433"
     }
   },
   "parameters": {
@@ -153,7 +153,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-04-01",
-      "name": "[format('qatardiag{0}', variables('uniqueness'))]",
+      "name": "[format('qcdiag{0}', variables('uniqueness'))]",
       "location": "[parameters('location1')]",
       "sku": {
         "name": "Standard_LRS"
@@ -163,7 +163,7 @@
     {
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2021-04-01",
-      "name": "[format('japaneastdiag{0}', variables('uniqueness'))]",
+      "name": "[format('jediag{0}', variables('uniqueness'))]",
       "location": "[parameters('location2')]",
       "sku": {
         "name": "Standard_LRS"
@@ -212,13 +212,13 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('qatardiag{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('qcdiag{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
           }
         }
       },
       "dependsOn": [
         "[resourceId('Microsoft.Network/networkInterfaces', 'qatar-nic')]",
-        "[resourceId('Microsoft.Storage/storageAccounts', format('qatardiag{0}', variables('uniqueness')))]"
+        "[resourceId('Microsoft.Storage/storageAccounts', format('qcdiag{0}', variables('uniqueness')))]"
       ]
     },
     {
@@ -263,12 +263,12 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('japaneastdiag{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('jediag{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts', format('japaneastdiag{0}', variables('uniqueness')))]",
+        "[resourceId('Microsoft.Storage/storageAccounts', format('jediag{0}', variables('uniqueness')))]",
         "[resourceId('Microsoft.Network/networkInterfaces', 'japaneast-nic')]"
       ]
     }

@@ -113,7 +113,7 @@ resource networkInterface2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 
 /* diag storage*/
 resource qatarstg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: 'qatardiag${uniqueness}'
+  name: 'qcdiag${uniqueness}'
   location: location1
   sku: {
     name: 'Standard_LRS'
@@ -122,7 +122,7 @@ resource qatarstg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
 }
 
 resource japaneaststg 'Microsoft.Storage/storageAccounts@2021-04-01' = {
-  name: 'japaneastdiag${uniqueness}'
+  name: 'jediag${uniqueness}'
   location: location2
   sku: {
     name: 'Standard_LRS'
