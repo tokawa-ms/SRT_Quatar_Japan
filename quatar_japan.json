@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "5392682948315991409"
+      "templateHash": "13089019747520573484"
     }
   },
   "parameters": {
@@ -214,7 +214,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines",
       "apiVersion": "2020-12-01",
-      "name": "[format('srt-gateway-qatar-vm-{0}', variables('uniqueness'))]",
+      "name": "[format('srt-gateway-japaneast-vm-{0}', variables('uniqueness'))]",
       "location": "[parameters('location2')]",
       "plan": {
         "name": "srt-gateway-3-7-5-mi",
