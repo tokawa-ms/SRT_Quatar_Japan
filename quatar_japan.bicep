@@ -205,7 +205,7 @@ resource quatarVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   }
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_F8s_v2'
+      vmSize: 'Standard_D4s_v3'
     }
     osProfile: {
       computerName: 'srtgatewayqatar${uniqueness}'
@@ -251,7 +251,7 @@ resource japaneastVM 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   }
   properties: {
     hardwareProfile: {
-      vmSize: 'Standard_F8s_v2'
+      vmSize: 'Standard_D4s_v3'
     }
     osProfile: {
       computerName: 'srtgatewayjapan${uniqueness}'
