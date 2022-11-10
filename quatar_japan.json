@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "17202183974454294752"
+      "templateHash": "7947732502140451948"
     }
   },
   "parameters": {
@@ -18,9 +18,10 @@
       "defaultValue": "japaneast"
     },
     "adminusername": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "hvroot"
     },
-    "adminpassword": {
+    "adminkey": {
       "type": "secureString"
     }
   },
@@ -70,7 +71,18 @@
       }
     ],
     "uniqueness": "[uniqueString(resourceGroup().id)]",
-    "sharedRules": "[variables('$fxv#0')]"
+    "sharedRules": "[variables('$fxv#0')]",
+    "linuxConfiguration": {
+      "disablePasswordAuthentication": true,
+      "ssh": {
+        "publicKeys": [
+          {
+            "path": "[format('/home/{0}/.ssh/authorized_keys', parameters('adminusername'))]",
+            "keyData": "[parameters('adminkey')]"
+          }
+        ]
+      }
+    }
   },
   "resources": [
     {
@@ -296,7 +308,8 @@
         "osProfile": {
           "computerName": "[format('srtgatewayqatar{0}', variables('uniqueness'))]",
           "adminUsername": "[parameters('adminusername')]",
-          "adminPassword": "[parameters('adminpassword')]"
+          "adminPassword": "[parameters('adminkey')]",
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -347,7 +360,8 @@
         "osProfile": {
           "computerName": "[format('srtgatewayjapan{0}', variables('uniqueness'))]",
           "adminUsername": "[parameters('adminusername')]",
-          "adminPassword": "[parameters('adminpassword')]"
+          "adminPassword": "[parameters('adminkey')]",
+          "linuxConfiguration": "[variables('linuxConfiguration')]"
         },
         "storageProfile": {
           "imageReference": {
