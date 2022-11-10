@@ -76,12 +76,12 @@ resource peering2 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2020
 
 /* vm nic*/
 resource networkInterface1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'qatar-nic'
+  name: 'qatar-nic-${uniqueness}'
   location: location1
   properties: {
     ipConfigurations: [
       {
-        name: 'qatar-ip'
+        name: 'qatar-ip-${uniqueness}'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
@@ -94,12 +94,12 @@ resource networkInterface1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
 }
 
 resource networkInterface2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
-  name: 'japaneast-nic'
+  name: 'japaneast-nic-${uniqueness}'
   location: location2
   properties: {
     ipConfigurations: [
       {
-        name: 'japaneast-ip'
+        name: 'japaneast-ip-${uniqueness}'
         properties: {
           privateIPAllocationMethod: 'Dynamic'
           subnet: {
