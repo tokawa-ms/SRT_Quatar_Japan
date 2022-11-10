@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "36369433675630315"
+      "templateHash": "14225131085266517789"
     }
   },
   "parameters": {
@@ -277,7 +277,7 @@
       },
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_F8s_v2"
+          "vmSize": "Standard_D4s_v3"
         },
         "osProfile": {
           "computerName": "[format('srtgatewayqatar{0}', variables('uniqueness'))]",
@@ -328,7 +328,7 @@
       },
       "properties": {
         "hardwareProfile": {
-          "vmSize": "Standard_F8s_v2"
+          "vmSize": "Standard_D4s_v3"
         },
         "osProfile": {
           "computerName": "[format('srtgatewayjapan{0}', variables('uniqueness'))]",
