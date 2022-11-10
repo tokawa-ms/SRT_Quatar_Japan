@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.12.40.16777",
-      "templateHash": "5901441271679508916"
+      "templateHash": "4260043983501843285"
     }
   },
   "parameters": {
@@ -25,9 +25,58 @@
     }
   },
   "variables": {
-    "uniqueness": "[uniqueString(resourceGroup().id)]"
+    "$fxv#0": [
+      {
+        "name": "Allow_HTTP_from_Any_IP",
+        "properties": {
+          "description": "Allow inbound RDP from the company's IP address range.",
+          "protocol": "Tcp",
+          "sourceAddressPrefix": "*",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "VirtualNetwork",
+          "destinationPortRange": "80",
+          "access": "Allow",
+          "priority": 100,
+          "direction": "Inbound"
+        }
+      },
+      {
+        "name": "Allow_HTTPS_from_Any_IP",
+        "properties": {
+          "description": "Allow inbound RDP from the company's IP address range.",
+          "protocol": "Tcp",
+          "sourceAddressPrefix": "*",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "VirtualNetwork",
+          "destinationPortRange": "443",
+          "access": "Allow",
+          "priority": 101,
+          "direction": "Inbound"
+        }
+      }
+    ],
+    "uniqueness": "[uniqueString(resourceGroup().id)]",
+    "sharedRules": "[variables('$fxv#0')]"
   },
   "resources": [
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2021-08-01",
+      "name": "[format('qcnsg-{0}', variables('uniqueness'))]",
+      "location": "[parameters('location1')]",
+      "properties": {
+        "securityRules": "[variables('sharedRules')]"
+      }
+    },
+    {
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "apiVersion": "2021-08-01",
+      "name": "[format('jensg-{0}', variables('uniqueness'))]",
+      "location": "[parameters('location2')]",
+      "properties": {
+        "securityRules": "[variables('sharedRules')]"
+      }
+    },
     {
       "type": "Microsoft.Network/virtualNetworks",
       "apiVersion": "2019-11-01",
@@ -122,9 +171,13 @@
               }
             }
           }
-        ]
+        ],
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('qcnsg-{0}', variables('uniqueness')))]"
+        }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', format('qcnsg-{0}', variables('uniqueness')))]",
         "[resourceId('Microsoft.Network/virtualNetworks', format('qatarcentral-vnet-{0}', variables('uniqueness')))]"
       ]
     },
@@ -144,9 +197,13 @@
               }
             }
           }
-        ]
+        ],
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups', format('jensg-{0}', variables('uniqueness')))]"
+        }
       },
       "dependsOn": [
+        "[resourceId('Microsoft.Network/networkSecurityGroups', format('jensg-{0}', variables('uniqueness')))]",
         "[resourceId('Microsoft.Network/virtualNetworks', format('japaneast-vnet-{0}', variables('uniqueness')))]"
       ]
     },

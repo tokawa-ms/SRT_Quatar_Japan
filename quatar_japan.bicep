@@ -1,5 +1,23 @@
 /* uniqueness*/
 var uniqueness = uniqueString(resourceGroup().id)
+var sharedRules = loadJsonContent('./shared-nsg-rules.json', 'securityRules')
+
+/* NSG */
+resource qcnsg 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
+  name: 'qcnsg-${uniqueness}'
+  location: location1
+  properties: {
+    securityRules: sharedRules
+  }
+}
+
+resource jensg 'Microsoft.Network/networkSecurityGroups@2021-08-01' = {
+  name: 'jensg-${uniqueness}'
+  location: location2
+  properties: {
+    securityRules: sharedRules
+  }
+}
 
 /* Qatar Central VNET */
 param location1 string = 'qatarcentral'
@@ -90,6 +108,9 @@ resource networkInterface1 'Microsoft.Network/networkInterfaces@2020-11-01' = {
         }
       }
     ]
+    networkSecurityGroup:{
+      id: qcnsg.id
+    }
   }
 }
 
@@ -108,6 +129,9 @@ resource networkInterface2 'Microsoft.Network/networkInterfaces@2020-11-01' = {
         }
       }
     ]
+    networkSecurityGroup:{
+      id: jensg.id
+    }
   }
 }
 

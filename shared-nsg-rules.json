@@ -1,0 +1,32 @@
+{
+    "securityRules": [
+      {
+        "name": "Allow_HTTP_from_Any_IP",
+        "properties": {
+          "description": "Allow inbound RDP from the company's IP address range.",
+          "protocol": "Tcp",
+          "sourceAddressPrefix": "*",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "VirtualNetwork",
+          "destinationPortRange": "80",
+          "access": "Allow",
+          "priority": 100,
+          "direction": "Inbound"
+        }
+      },
+      {
+        "name": "Allow_HTTPS_from_Any_IP",
+        "properties": {
+          "description": "Allow inbound RDP from the company's IP address range.",
+          "protocol": "Tcp",
+          "sourceAddressPrefix": "*",
+          "sourcePortRange": "*",
+          "destinationAddressPrefix": "VirtualNetwork",
+          "destinationPortRange": "443",
+          "access": "Allow",
+          "priority": 101,
+          "direction": "Inbound"
+        }
+      }
+    ]
+  }
