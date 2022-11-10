@@ -1,0 +1,266 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.12.40.16777",
+      "templateHash": "5392682948315991409"
+    }
+  },
+  "parameters": {
+    "location1": {
+      "type": "string",
+      "defaultValue": "qatarcentral"
+    },
+    "location2": {
+      "type": "string",
+      "defaultValue": "japaneast"
+    },
+    "adminusername": {
+      "type": "string"
+    },
+    "adminpassword": {
+      "type": "secureString"
+    }
+  },
+  "variables": {
+    "uniqueness": "[uniqueString(resourceGroup().id)]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-11-01",
+      "name": "[format('qatarcentral-vnet-{0}', variables('uniqueness'))]",
+      "location": "[parameters('location1')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.0.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "Subnet-1",
+            "properties": {
+              "addressPrefix": "10.0.0.0/24"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks",
+      "apiVersion": "2019-11-01",
+      "name": "[format('japaneast-vnet-{0}', variables('uniqueness'))]",
+      "location": "[parameters('location2')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "10.1.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "Subnet-1",
+            "properties": {
+              "addressPrefix": "10.1.0.0/24"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2020-07-01",
+      "name": "[format('{0}/{1}', format('qatarcentral-vnet-{0}', variables('uniqueness')), 'qatar-japaneast')]",
+      "properties": {
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": true,
+        "allowGatewayTransit": true,
+        "useRemoteGateways": false,
+        "remoteVirtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', format('japaneast-vnet-{0}', variables('uniqueness')))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', format('qatarcentral-vnet-{0}', variables('uniqueness')))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', format('japaneast-vnet-{0}', variables('uniqueness')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+      "apiVersion": "2020-07-01",
+      "name": "[format('{0}/{1}', format('japaneast-vnet-{0}', variables('uniqueness')), 'japaneast-qatar')]",
+      "properties": {
+        "allowVirtualNetworkAccess": true,
+        "allowForwardedTraffic": true,
+        "allowGatewayTransit": true,
+        "useRemoteGateways": false,
+        "remoteVirtualNetwork": {
+          "id": "[resourceId('Microsoft.Network/virtualNetworks', format('qatarcentral-vnet-{0}', variables('uniqueness')))]"
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', format('qatarcentral-vnet-{0}', variables('uniqueness')))]",
+        "[resourceId('Microsoft.Network/virtualNetworks', format('japaneast-vnet-{0}', variables('uniqueness')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "qatar-nic",
+      "location": "[parameters('location1')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "qatar-ip",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('qatarcentral-vnet-{0}', variables('uniqueness')), 'Subnet-1')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', format('qatarcentral-vnet-{0}', variables('uniqueness')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Network/networkInterfaces",
+      "apiVersion": "2020-11-01",
+      "name": "japaneast-nic",
+      "location": "[parameters('location1')]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "qatar-ip",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', format('qatarcentral-vnet-{0}', variables('uniqueness')), 'Subnet-1')]"
+              }
+            }
+          }
+        ]
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/virtualNetworks', format('qatarcentral-vnet-{0}', variables('uniqueness')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2021-04-01",
+      "name": "[format('diagstorage{0}', variables('uniqueness'))]",
+      "location": "[parameters('location1')]",
+      "sku": {
+        "name": "Standard_LRS"
+      },
+      "kind": "Storage"
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-12-01",
+      "name": "[format('srt-gateway-qatar-vm-{0}', variables('uniqueness'))]",
+      "location": "[parameters('location1')]",
+      "plan": {
+        "name": "srt-gateway-3-7-5-mi",
+        "publisher": "haivisionsystemsinc1580780591922",
+        "product": "haivision-srt-gateway"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_F8s_v2"
+        },
+        "osProfile": {
+          "computerName": "srtgatewayqatar",
+          "adminUsername": "[parameters('adminusername')]",
+          "adminPassword": "[parameters('adminpassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "haivisionsystemsinc1580780591922",
+            "offer": "haivision-srt-gateway",
+            "sku": "srt-gateway-3-7-5-mi",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'qatar-nic')]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('diagstorage{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'qatar-nic')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', format('diagstorage{0}', variables('uniqueness')))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Compute/virtualMachines",
+      "apiVersion": "2020-12-01",
+      "name": "[format('srt-gateway-qatar-vm-{0}', variables('uniqueness'))]",
+      "location": "[parameters('location2')]",
+      "plan": {
+        "name": "srt-gateway-3-7-5-mi",
+        "publisher": "haivisionsystemsinc1580780591922",
+        "product": "haivision-srt-gateway"
+      },
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "Standard_F8s_v2"
+        },
+        "osProfile": {
+          "computerName": "srtgatewayqatar",
+          "adminUsername": "[parameters('adminusername')]",
+          "adminPassword": "[parameters('adminpassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "haivisionsystemsinc1580780591922",
+            "offer": "haivision-srt-gateway",
+            "sku": "srt-gateway-3-7-5-mi",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          }
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', 'japaneast-nic')]"
+            }
+          ]
+        },
+        "diagnosticsProfile": {
+          "bootDiagnostics": {
+            "enabled": true,
+            "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', format('diagstorage{0}', variables('uniqueness'))), '2021-04-01').primaryEndpoints.blob]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/networkInterfaces', 'japaneast-nic')]",
+        "[resourceId('Microsoft.Storage/storageAccounts', format('diagstorage{0}', variables('uniqueness')))]"
+      ]
+    }
+  ]
+}
